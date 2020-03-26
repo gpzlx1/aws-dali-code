@@ -16,7 +16,7 @@ import torch.utils.data
 import torch.utils.data.distributed
 import torchvision.models as models
 
-result_root = "/home/ubuntu/result5/"
+
 
 try:
     from nvidia.dali.plugin.pytorch import DALIClassificationIterator
@@ -108,7 +108,7 @@ class HybridTrainPipe(Pipeline):
         self.labels = input["label"]
         images = self.decode(self.jpegs).gpu()
         images = self.res(images)
-        output = self.cmnp(images mirror=rng)
+        output = self.cmnp(images, mirror=rng)
         return [output, self.labels]
 
 class HybridValPipe(Pipeline):
@@ -270,7 +270,7 @@ def main():
     for epoch in range(args.start_epoch, args.epochs):
         # train for one epoch
 
-        avg_train_time = train(train_loader, model, criterion, optimizer, epoch, result_path)
+        avg_train_time = train(train_loader, model, criterion, optimizer, epoch)
         total_time.update(avg_train_time)
         if args.prof:
             break
@@ -297,7 +297,7 @@ def main():
         train_loader.reset()
         #val_loader.reset()
 
-def train(train_loader, model, criterion, optimizer, epoch, result_path):
+def train(train_loader, model, criterion, optimizer, epoch):
     batch_time = AverageMeter()
     data_time = AverageMeter()
     losses = AverageMeter()

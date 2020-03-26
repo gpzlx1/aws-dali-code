@@ -25,7 +25,7 @@ do
 nohup nvidia-smi dmon -s pucvmet -c 500 -f result/alexnet_cpu_decode/${arch}_${num_worker}.gpu &
 /home/ubuntu/nmon -s 1 -c 500 -F result/alexnet_cpu_decode/${arch}_${num_worker}.nmon
 #sudo sync &&  echo 3 > /proc/sys/vm/drop_caches
-$python_path -m torch.distributed.launch --nproc_per_node=$num_gpu ${src_path}dali_tfr1.py --epochs $num_epoch  --workers $num_worker   -a $arch -b $batch_size --fp16  $record_path > result/alexnet_cpu_decode/${arch}_${num_worker}.data
+$python_path -m torch.distributed.launch --nproc_per_node=$num_gpu dali_tfr1.py --epochs $num_epoch  --workers $num_worker   -a $arch -b $batch_size --fp16  $record_path > result/alexnet_cpu_decode/${arch}_${num_worker}.data
 pkill python3
 pkill nmon
 pkill nvidia-smi
